@@ -57,22 +57,7 @@ echo -e "-----------------------------------------------------"
 # Set kernel source workspace
 cd $KERNEL_DIR
 
-# Clean build
-make O=$OUT_DIR clean
-CLEAN_SUCCESS=$?
-if [ $CLEAN_SUCCESS != 0 ]
-	then
-		echo "$red Error: make clean failed"
-		exit
-fi
-
-make O=$OUT_DIR mrproper
-MRPROPER_SUCCESS=$?
-if [ $MRPROPER_SUCCESS != 0 ]
-	then
-		echo "$red Error: make mrproper failed"
-		exit
-fi
+rm -rf out
 
 # Make your device device_defconfig
 make O=$OUT_DIR ARCH=$ARCH KCFLAGS=-mno-android $DEFCONFIG
@@ -93,7 +78,6 @@ DIFF=$(($BUILD_END - $BUILD_START))
 BUILD_SUCCESS=$?
 if [ $BUILD_SUCCESS != 0 ]
 	then
-		sh ~/buildfailed.sh
 		echo "$red Error: Build failed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds $reset"
 		exit
 fi
